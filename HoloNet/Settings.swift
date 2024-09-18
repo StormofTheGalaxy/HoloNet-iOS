@@ -17,7 +17,7 @@ let allowedOrigins: [String] = ["holonet.stormgalaxy.com"]
 
 // auth origins will open in modal and show toolbar for back into the main origin.
 // These should also appear in Info.plist
-let authOrigins: [String] = []
+let authOrigins: [String] = ["discord.com", "appleid.apple.com", "github.com", "vk.com"]
 // allowedOrigins + authOrigins <= 10
 
 let platformCookie = Cookie(name: "app-platform", value: "iOS App Store")
@@ -25,6 +25,6 @@ let platformCookie = Cookie(name: "app-platform", value: "iOS App Store")
 // UI options
 let displayMode = "standalone" // standalone / fullscreen.
 let adaptiveUIStyle = true     // iOS 15+ only. Change app theme on the fly to dark/light related to WebView background color.
-let overrideStatusBar = false   // iOS 13-14 only. if you don't support dark/light system theme.
+let overrideStatusBar = true   // iOS 13-14 only. if you don't support dark/light system theme.
 let statusBarTheme = "dark"    // dark / light, related to override option.
-let pullToRefresh = true    // Enable/disable pull down to refresh page
+let pullToRefresh = false    // Enable/disable pull down to refresh page

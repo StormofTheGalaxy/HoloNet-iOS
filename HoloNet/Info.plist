@@ -32,7 +32,7 @@
 			<key>CFBundleURLName</key>
 			<string></string>
 			<key>CFBundleURLSchemes</key>
-			<array />
+			<array/>
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
@@ -97,6 +97,10 @@
 	<key>WKAppBoundDomains</key>
 	<array>
 		<string>holonet.stormgalaxy.com</string>
+		<string>appleid.apple.com</string>
+		<string>discord.com</string>
+		<string>github.com</string>
+		<string>vk.com</string>
 	</array>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
@@ -105,7 +109,7 @@
 		<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 	</array>
 	<key>UIApplicationShortcutItems</key>
-<array>
+	<array>
 		<dict>
 			<key>UIApplicationShortcutItemType</key>
 			<string>https://holonet.stormgalaxy.com/new-topic</string>
@@ -129,6 +133,7 @@
 			<string>https://holonet.stormgalaxy.com/top</string>
 			<key>UIApplicationShortcutItemTitle</key>
 			<string>Обсуждаемые</string>
-		</dict></array>
+		</dict>
+	</array>
 </dict>
 </plist>
