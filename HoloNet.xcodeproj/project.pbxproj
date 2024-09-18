@@ -25,6 +25,8 @@
 /* Begin PBXFileReference section */
 		25D3517E267A48E0002E5DC0 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "HoloNet/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		44C9B0272C99964B001CC380 /* ci_post_clone.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = ci_post_clone.sh; sourceTree = "<group>"; };
+		44F1E94D2C9B0F220015B4E5 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = HoloNet/ru.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		44F1E94E2C9B0F230015B4E5 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = HoloNet/ru.lproj/Main.strings; sourceTree = "<group>"; };
 		4C1C2162A8048FDF52B2A9D0 /* Pods-HoloNet.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HoloNet.release.xcconfig"; path = "Target Support Files/Pods-HoloNet/Pods-HoloNet.release.xcconfig"; sourceTree = "<group>"; };
 		59333BAA25CFF706003392A4 /* HoloNet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HoloNet.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		595F239A25CEFBFD0053416C /* Settings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Settings.swift; path = HoloNet/Settings.swift; sourceTree = "<group>"; };
@@ -143,11 +145,12 @@
 			};
 			buildConfigurationList = CD89F884237E9D9200C436A1 /* Build configuration list for PBXProject "HoloNet" */;
 			compatibilityVersion = "Xcode 11.0";
-			developmentRegion = en;
+			developmentRegion = ru;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
 				Base,
+				ru,
 			);
 			mainGroup = CD89F880237E9D9200C436A1;
 			productRefGroup = CD89F880237E9D9200C436A1;
@@ -238,6 +241,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				CDC0FE262388222B002C8D56 /* Base */,
+				44F1E94E2C9B0F230015B4E5 /* ru */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
@@ -246,6 +250,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				CDC0FE282388222B002C8D56 /* Base */,
+				44F1E94D2C9B0F220015B4E5 /* ru */,
 			);
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
@@ -257,6 +262,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -320,6 +326,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";

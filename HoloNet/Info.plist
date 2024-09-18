@@ -2,12 +2,10 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>NSMicrophoneUsageDescription</key>
-	<string>Capture Audio by user request</string>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Track current location by user request</string>
-	<key>NSCameraUsageDescription</key>
-	<string>Capture Video by user request</string>
+	<key>BGTaskSchedulerPermittedIdentifiers</key>
+	<array>
+		<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+	</array>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
@@ -37,6 +35,8 @@
 	</array>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
@@ -44,6 +44,12 @@
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
 	</dict>
+	<key>NSCameraUsageDescription</key>
+	<string>Capture Video by user request</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Track current location by user request</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Capture Audio by user request</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
@@ -63,6 +69,41 @@
 			</array>
 		</dict>
 	</dict>
+	<key>UIApplicationShortcutItems</key>
+	<array>
+		<dict>
+			<key>UIApplicationShortcutItemIconSymbolName</key>
+			<string>plus</string>
+			<key>UIApplicationShortcutItemTitle</key>
+			<string>Создать новую тему</string>
+			<key>UIApplicationShortcutItemType</key>
+			<string>https://holonet.stormgalaxy.com/new-topic</string>
+		</dict>
+		<dict>
+			<key>UIApplicationShortcutItemIconSymbolName</key>
+			<string>mail</string>
+			<key>UIApplicationShortcutItemTitle</key>
+			<string>Входящие</string>
+			<key>UIApplicationShortcutItemType</key>
+			<string>https://holonet.stormgalaxy.com/my/messages</string>
+		</dict>
+		<dict>
+			<key>UIApplicationShortcutItemIconSymbolName</key>
+			<string>star</string>
+			<key>UIApplicationShortcutItemTitle</key>
+			<string>Закладки</string>
+			<key>UIApplicationShortcutItemType</key>
+			<string>https://holonet.stormgalaxy.com/my/activity/bookmarks</string>
+		</dict>
+		<dict>
+			<key>UIApplicationShortcutItemIconSymbolName</key>
+			<string>flame</string>
+			<key>UIApplicationShortcutItemTitle</key>
+			<string>Обсуждаемые</string>
+			<key>UIApplicationShortcutItemType</key>
+			<string>https://holonet.stormgalaxy.com/top</string>
+		</dict>
+	</array>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>processing</string>
@@ -101,39 +142,6 @@
 		<string>discord.com</string>
 		<string>github.com</string>
 		<string>vk.com</string>
-	</array>
-	<key>ITSAppUsesNonExemptEncryption</key>
-	<false/>
-	<key>BGTaskSchedulerPermittedIdentifiers</key>
-	<array>
-		<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
-	</array>
-	<key>UIApplicationShortcutItems</key>
-	<array>
-		<dict>
-			<key>UIApplicationShortcutItemType</key>
-			<string>https://holonet.stormgalaxy.com/new-topic</string>
-			<key>UIApplicationShortcutItemTitle</key>
-			<string>Создать новую тему</string>
-		</dict>
-		<dict>
-			<key>UIApplicationShortcutItemType</key>
-			<string>https://holonet.stormgalaxy.com/my/messages</string>
-			<key>UIApplicationShortcutItemTitle</key>
-			<string>Входящие</string>
-		</dict>
-		<dict>
-			<key>UIApplicationShortcutItemType</key>
-			<string>https://holonet.stormgalaxy.com/my/activity/bookmarks</string>
-			<key>UIApplicationShortcutItemTitle</key>
-			<string>Закладки</string>
-		</dict>
-		<dict>
-			<key>UIApplicationShortcutItemType</key>
-			<string>https://holonet.stormgalaxy.com/top</string>
-			<key>UIApplicationShortcutItemTitle</key>
-			<string>Обсуждаемые</string>
-		</dict>
 	</array>
 </dict>
 </plist>
