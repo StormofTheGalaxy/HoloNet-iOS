@@ -30,6 +30,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 // TODO: if we're using Firebase, uncomment next string
         application.registerForRemoteNotifications()
+        
+        handlePushPermission()
 
         // [END register_for_notifications]
         return true
