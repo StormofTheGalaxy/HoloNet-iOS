@@ -122,7 +122,14 @@ class ViewController: UIViewController, WKNavigationDelegate, UIDocumentInteract
     }
     
     @objc func loadRootUrl() {
-        HoloNet.webView.load(URLRequest(url: SceneDelegate.universalLinkToLaunch ?? SceneDelegate.shortcutLinkToLaunch ?? rootUrl))
+        if #available(iOS 16.0, *) {
+            if (HoloNet.webView.url?.host() != rootUrl.host()) {
+                HoloNet.webView.load(URLRequest(url: SceneDelegate.universalLinkToLaunch ?? SceneDelegate.shortcutLinkToLaunch ?? rootUrl))
+            }
+        } else {
+            // Fallback on earlier versions
+            HoloNet.webView.load(URLRequest(url: SceneDelegate.universalLinkToLaunch ?? SceneDelegate.shortcutLinkToLaunch ?? rootUrl))
+        }
     }
     
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!){

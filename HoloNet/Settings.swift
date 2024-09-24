@@ -13,11 +13,11 @@ let rootUrl = URL(string: "https://holonet.stormgalaxy.com")!
 
 // allowed origin is for what we are sticking to pwa domain
 // This should also appear in Info.plist
-let allowedOrigins: [String] = ["holonet.stormgalaxy.com"]
+let allowedOrigins: [String] = ["holonet.stormgalaxy.com", "appleid.apple.com", "apple.com"]
 
 // auth origins will open in modal and show toolbar for back into the main origin.
 // These should also appear in Info.plist
-let authOrigins: [String] = ["discord.com", "appleid.apple.com", "github.com", "vk.com"]
+let authOrigins: [String] = ["discord.com", "github.com", "vk.com"]
 // allowedOrigins + authOrigins <= 10
 
 let platformCookie = Cookie(name: "app-platform", value: "iOS App Store")

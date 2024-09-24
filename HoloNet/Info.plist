@@ -30,7 +30,9 @@
 			<key>CFBundleURLName</key>
 			<string></string>
 			<key>CFBundleURLSchemes</key>
-			<array/>
+			<array>
+				<string>holonet</string>
+			</array>
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
@@ -137,6 +139,7 @@
 	<true/>
 	<key>WKAppBoundDomains</key>
 	<array>
+		<string>apple.com</string>
 		<string>holonet.stormgalaxy.com</string>
 		<string>appleid.apple.com</string>
 		<string>discord.com</string>
