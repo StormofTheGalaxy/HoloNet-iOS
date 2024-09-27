@@ -49,9 +49,9 @@
 		<true/>
 	</dict>
 	<key>NSCameraUsageDescription</key>
-	<string>We need access to your videocamera to be able record video for your new post or message</string>
+	<string>We need access to the camera to take photos or record videos that you want to add to your post</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>We need access to your microphone to be able record audio for your new post or message</string>
+	<string>We need access to a microphone to record your audio message</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
