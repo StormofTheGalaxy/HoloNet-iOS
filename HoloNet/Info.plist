@@ -71,41 +71,6 @@
 			</array>
 		</dict>
 	</dict>
-	<key>UIApplicationShortcutItems</key>
-	<array>
-		<dict>
-			<key>UIApplicationShortcutItemIconSymbolName</key>
-			<string>plus</string>
-			<key>UIApplicationShortcutItemTitle</key>
-			<string>Создать новую тему</string>
-			<key>UIApplicationShortcutItemType</key>
-			<string>https://holonet.stormgalaxy.com/new-topic</string>
-		</dict>
-		<dict>
-			<key>UIApplicationShortcutItemIconSymbolName</key>
-			<string>mail</string>
-			<key>UIApplicationShortcutItemTitle</key>
-			<string>Входящие</string>
-			<key>UIApplicationShortcutItemType</key>
-			<string>https://holonet.stormgalaxy.com/my/messages</string>
-		</dict>
-		<dict>
-			<key>UIApplicationShortcutItemIconSymbolName</key>
-			<string>star</string>
-			<key>UIApplicationShortcutItemTitle</key>
-			<string>Закладки</string>
-			<key>UIApplicationShortcutItemType</key>
-			<string>https://holonet.stormgalaxy.com/my/activity/bookmarks</string>
-		</dict>
-		<dict>
-			<key>UIApplicationShortcutItemIconSymbolName</key>
-			<string>flame</string>
-			<key>UIApplicationShortcutItemTitle</key>
-			<string>Обсуждаемые</string>
-			<key>UIApplicationShortcutItemType</key>
-			<string>https://holonet.stormgalaxy.com/top</string>
-		</dict>
-	</array>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>processing</string>
@@ -139,12 +104,7 @@
 	<true/>
 	<key>WKAppBoundDomains</key>
 	<array>
-		<string>apple.com</string>
-		<string>holonet.stormgalaxy.com</string>
-		<string>appleid.apple.com</string>
-		<string>discord.com</string>
-		<string>github.com</string>
-		<string>vk.com</string>
+		<string>crm.stormgalaxy.com</string>
 	</array>
 </dict>
 </plist>

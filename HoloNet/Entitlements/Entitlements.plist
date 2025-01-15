@@ -6,8 +6,8 @@
 	<string>production</string>
 	<key>com.apple.developer.associated-domains</key>
 	<array>
-		<string>applinks:holonet.stormgalaxy.com</string>
-		<string>webcredentials:holonet.stormgalaxy.com</string>
+		<string>applinks:crm.stormgalaxy.com</string>
+		<string>webcredentials:crm.stormgalaxy.com</string>
 	</array>
 	<key>com.apple.security.app-sandbox</key>
 	<true/>
