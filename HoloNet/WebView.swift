@@ -382,10 +382,20 @@ extension ViewController: WKUIDelegate, WKDownloadDelegate {
             preferredStyle: .alert
         )
         
+        // Добавляем индикатор активности
+        let indicator = UIActivityIndicatorView(frame: CGRect(x: 10, y: 5, width: 50, height: 50))
+        indicator.hidesWhenStopped = true
+        indicator.style = .medium
+        indicator.startAnimating()
+        loadingAlert.view.addSubview(indicator)
+        
         // Показываем индикатор загрузки
         present(loadingAlert, animated: true)
         
-        URLSession.shared.downloadTask(with: url) { [weak self] tempUrl, _, error in
+        // Создаем новую сессию для каждой загрузки
+        let session = URLSession(configuration: .default)
+        
+        session.downloadTask(with: url) { [weak self] tempUrl, response, error in
             guard let self = self else { return }
             
             // Скрываем индикатор загрузки
@@ -401,23 +411,60 @@ extension ViewController: WKUIDelegate, WKDownloadDelegate {
                             try? FileManager.default.removeItem(at: destUrl)
                             try FileManager.default.copyItem(at: tempUrl, to: destUrl)
                             
-                            let activityVC = UIActivityViewController(
-                                activityItems: [destUrl],
-                                applicationActivities: nil
-                            )
-                            
-                            activityVC.completionWithItemsHandler = { _, _, _, _ in
-                                try? FileManager.default.removeItem(at: destUrl)
+                            // Убедимся, что предыдущие презентации завершены
+                            if let presentedVC = self.presentedViewController {
+                                presentedVC.dismiss(animated: false) {
+                                    self.presentShareSheet(fileUrl: destUrl)
+                                }
+                            } else {
+                                self.presentShareSheet(fileUrl: destUrl)
                             }
-                            
-                            self.present(activityVC, animated: true)
                         } catch {
                             print("Ошибка обработки файла: \(error)")
+                            // Показываем сообщение об ошибке
+                            let errorAlert = UIAlertController(
+                                title: "Ошибка",
+                                message: "Не удалось подготовить файл",
+                                preferredStyle: .alert
+                            )
+                            
+                            errorAlert.addAction(UIAlertAction(title: "OK", style: .default))
+                            self.present(errorAlert, animated: true)
                         }
+                    } else {
+                        // Показываем сообщение об ошибке загрузки
+                        let errorAlert = UIAlertController(
+                            title: "Ошибка загрузки",
+                            message: error?.localizedDescription ?? "Не удалось загрузить файл",
+                            preferredStyle: .alert
+                        )
+                        
+                        errorAlert.addAction(UIAlertAction(title: "OK", style: .default))
+                        self.present(errorAlert, animated: true)
                     }
                 }
             }
         }.resume()
+    }
+    
+    private func presentShareSheet(fileUrl: URL) {
+        let activityVC = UIActivityViewController(
+            activityItems: [fileUrl],
+            applicationActivities: nil
+        )
+        
+        // На iPad нужно указать источник для popover
+        if let popover = activityVC.popoverPresentationController {
+            popover.sourceView = self.view
+            popover.sourceRect = CGRect(x: self.view.bounds.midX, y: self.view.bounds.midY, width: 0, height: 0)
+            popover.permittedArrowDirections = []
+        }
+        
+        activityVC.completionWithItemsHandler = { _, _, _, _ in
+            try? FileManager.default.removeItem(at: fileUrl)
+        }
+        
+        self.present(activityVC, animated: true)
     }
 
     func webView(_ webView: WKWebView, navigationAction: WKNavigationAction, didBecome download: WKDownload) {
