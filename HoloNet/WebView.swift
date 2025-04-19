@@ -110,15 +110,20 @@ extension ViewController: WKUIDelegate, WKDownloadDelegate {
     }
     // restrict navigation to target host, open external links in 3rd party apps
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
-        // Проверяем, является ли URL целевым доменом для ShareSheet
-        if let requestUrl = navigationAction.request.url,
-           let host = requestUrl.host,
-           host.contains("525f19cb-holonet.s3.twcstorage.ru") {
+        // Обработка специального домена
+        if let url = navigationAction.request.url,
+           url.host?.contains("525f19cb-holonet.s3.twcstorage.ru") == true {
             
-            decisionHandler(.cancel) // Блокируем стандартную обработку
+            decisionHandler(.cancel) // Блокируем переход
             
-            // Скачиваем файл и показываем ShareSheet
-            downloadFileAndShowShareSheet(url: requestUrl)
+            // Останавливаем текущую загрузку
+            webView.stopLoading()
+            
+            // Возвращаемся к предыдущему состоянию
+            webView.evaluateJavaScript("window.history.back()", completionHandler: nil)
+            
+            // Скачиваем и показываем ShareSheet
+            downloadFileAndShowShareSheet(url: url)
             return
         }
         
@@ -367,36 +372,48 @@ extension ViewController: WKUIDelegate, WKDownloadDelegate {
     }
     
     func downloadFileAndShowShareSheet(url: URL) {
-        let task = URLSession.shared.downloadTask(with: url) { [weak self] tempUrl, _, error in
-            guard let self = self, let tempUrl = tempUrl else { return }
+        let loadingAlert = UIAlertController(
+            title: "Загрузка файла",
+            message: "Пожалуйста, подождите...",
+            preferredStyle: .alert
+        )
+        
+        // Показываем индикатор загрузки
+        present(loadingAlert, animated: true)
+        
+        URLSession.shared.downloadTask(with: url) { [weak self] tempUrl, _, error in
+            guard let self = self else { return }
             
-            do {
-                // Используем временную директорию
-                let fileManager = FileManager.default
-                let tmpDir = fileManager.temporaryDirectory
-                let destinationUrl = tmpDir.appendingPathComponent(UUID().uuidString + "_" + url.lastPathComponent)
-                
-                try? fileManager.removeItem(at: destinationUrl)
-                try fileManager.copyItem(at: tempUrl, to: destinationUrl)
-                
-                DispatchQueue.main.async {
-                    let activityVC = UIActivityViewController(
-                        activityItems: [destinationUrl],
-                        applicationActivities: nil
-                    )
-                    
-                    // Автоочистка после завершения шеринга
-                    activityVC.completionWithItemsHandler = { _, _, _, _ in
-                        try? fileManager.removeItem(at: destinationUrl)
+            // Скрываем индикатор загрузки
+            DispatchQueue.main.async {
+                loadingAlert.dismiss(animated: true) {
+                    if let tempUrl = tempUrl, error == nil {
+                        do {
+                            let tmpDir = FileManager.default.temporaryDirectory
+                            let destUrl = tmpDir.appendingPathComponent(
+                                UUID().uuidString + "_" + url.lastPathComponent
+                            )
+                            
+                            try? FileManager.default.removeItem(at: destUrl)
+                            try FileManager.default.copyItem(at: tempUrl, to: destUrl)
+                            
+                            let activityVC = UIActivityViewController(
+                                activityItems: [destUrl],
+                                applicationActivities: nil
+                            )
+                            
+                            activityVC.completionWithItemsHandler = { _, _, _, _ in
+                                try? FileManager.default.removeItem(at: destUrl)
+                            }
+                            
+                            self.present(activityVC, animated: true)
+                        } catch {
+                            print("Ошибка обработки файла: \(error)")
+                        }
                     }
-                    
-                    self.present(activityVC, animated: true)
                 }
-            } catch {
-                print("File error: \(error.localizedDescription)")
             }
-        }
-        task.resume()
+        }.resume()
     }
 
     func webView(_ webView: WKWebView, navigationAction: WKNavigationAction, didBecome download: WKDownload) {
