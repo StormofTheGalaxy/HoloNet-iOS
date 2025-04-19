@@ -114,16 +114,20 @@ extension ViewController: WKUIDelegate, WKDownloadDelegate {
         if let url = navigationAction.request.url,
            url.host?.contains("525f19cb-holonet.s3.twcstorage.ru") == true {
             
-            decisionHandler(.cancel) // Блокируем переход
-            
-            // Останавливаем текущую загрузку
-            webView.stopLoading()
-            
-            // Возвращаемся к предыдущему состоянию
-            webView.evaluateJavaScript("window.history.back()", completionHandler: nil)
+            // Отменяем стандартную навигацию
+            decisionHandler(.cancel)
             
             // Скачиваем и показываем ShareSheet
             downloadFileAndShowShareSheet(url: url)
+            
+            // Если после отмены навигации требуется восстановить 
+            // работу приложения, перезагружаем текущую страницу
+            if let currentUrl = webView.url {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                    webView.load(URLRequest(url: currentUrl))
+                }
+            }
+            
             return
         }
         
@@ -217,7 +221,7 @@ extension ViewController: WKUIDelegate, WKDownloadDelegate {
             preferredStyle: .alert
         )
 
-        // Add a confirmation action “OK”
+        // Add a confirmation action "OK"
         let okAction = UIAlertAction(
             title: "OK",
             style: .default,
@@ -244,7 +248,7 @@ extension ViewController: WKUIDelegate, WKDownloadDelegate {
             preferredStyle: .alert
         )
 
-        // Add a confirmation action “Cancel”
+        // Add a confirmation action "Cancel"
         let cancelAction = UIAlertAction(
             title: "Cancel",
             style: .cancel,
@@ -254,7 +258,7 @@ extension ViewController: WKUIDelegate, WKDownloadDelegate {
             }
         )
 
-        // Add a confirmation action “OK”
+        // Add a confirmation action "OK"
         let okAction = UIAlertAction(
             title: "OK",
             style: .default,
@@ -283,7 +287,7 @@ extension ViewController: WKUIDelegate, WKDownloadDelegate {
             preferredStyle: .alert
         )
 
-        // Add a confirmation action “Cancel”
+        // Add a confirmation action "Cancel"
         let cancelAction = UIAlertAction(
             title: "Cancel",
             style: .cancel,
@@ -293,7 +297,7 @@ extension ViewController: WKUIDelegate, WKDownloadDelegate {
             }
         )
 
-        // Add a confirmation action “OK”
+        // Add a confirmation action "OK"
         let okAction = UIAlertAction(
             title: "OK",
             style: .default,
