@@ -13,7 +13,7 @@ let rootUrl = URL(string: "https://holonet.stormgalaxy.com")!
 
 // allowed origin is for what we are sticking to pwa domain
 // This should also appear in Info.plist
-let allowedOrigins: [String] = ["holonet.stormgalaxy.com", "appleid.apple.com", "apple.com", "cdn.stormgalaxy.com", "525f19cb-holonet.s3.twcstorage.ru"]
+let allowedOrigins: [String] = ["holonet.stormgalaxy.com", "appleid.apple.com", "apple.com", "525f19cb-holonet.s3.twcstorage.ru"]
 
 // auth origins will open in modal and show toolbar for back into the main origin.
 // These should also appear in Info.plist
