@@ -140,14 +140,14 @@ extension ViewController: WKUIDelegate, WKDownloadDelegate {
 
         if let requestUrl = navigationAction.request.url{
             if let requestHost = requestUrl.host {
-                // NOTE: Match auth origin first, because host origin may be a subset of auth origin and may therefore always match
+                // Проверяем, если это авторизационный домен
                 let matchingAuthOrigin = authOrigins.first(where: { requestHost.range(of: $0) != nil })
                 if (matchingAuthOrigin != nil) {
-                    decisionHandler(.allow)
-                    if (toolbarView.isHidden) {
-                        toolbarView.isHidden = false
-                        webView.frame = calcWebviewFrame(webviewView: webviewView, toolbarView: toolbarView)
-                    }
+                    // Отменяем стандартную навигацию
+                    decisionHandler(.cancel)
+                    
+                    // Запускаем авторизацию через ASWebAuthenticationSession
+                    startAuthenticationSession(url: requestUrl)
                     return
                 }
 
@@ -197,16 +197,12 @@ extension ViewController: WKUIDelegate, WKDownloadDelegate {
                         // not tested
                         downloadAndOpenFile(url: requestUrl.absoluteURL)
                     }
-                    // if (requestUrl.absoluteString.contains("base64")){
-                    //     downloadAndOpenBase64File(base64String: requestUrl.absoluteString)
-                    // }
                 }
             }
         }
         else {
             decisionHandler(.cancel)
         }
-
     }
     // Handle javascript: `window.alert(message: String)`
     func webView(_ webView: WKWebView,
@@ -480,5 +476,130 @@ extension ViewController: WKUIDelegate, WKDownloadDelegate {
 
         self.openFile(url: fileURL)
         completionHandler(fileURL)
+    }
+
+    // Метод для авторизации через ASWebAuthenticationSession
+    func startAuthenticationSession(url: URL) {
+        // Создаем URL для обратного вызова (используем существующую схему из Info.plist)
+        let callbackUrlScheme = "holonet"
+        
+        // Создаем и сохраняем ссылку на сессию авторизации
+        let authSession = ASWebAuthenticationSession(
+            url: url,
+            callbackURLScheme: callbackUrlScheme,
+            completionHandler: { [weak self] (callbackURL, error) in
+                guard let self = self else { return }
+                
+                if let error = error {
+                    if (error as NSError).code == ASWebAuthenticationSessionError.canceledLogin.rawValue {
+                        print("Пользователь отменил авторизацию")
+                    } else {
+                        print("Ошибка авторизации: \(error)")
+                        // Показываем ошибку пользователю
+                        let alert = UIAlertController(
+                            title: "Ошибка авторизации",
+                            message: error.localizedDescription,
+                            preferredStyle: .alert
+                        )
+                        alert.addAction(UIAlertAction(title: "OK", style: .default))
+                        self.present(alert, animated: true)
+                    }
+                    return
+                }
+                
+                // Обработка успешной авторизации
+                if let callbackURL = callbackURL {
+                    print("Успешная авторизация, получен URL: \(callbackURL)")
+                    
+                    // Здесь обрабатываем данные из URL (токены, коды и т.д.)
+                    self.processAuthenticationCallback(url: callbackURL)
+                }
+            }
+        )
+        
+        // Привязываем сессию к текущему окну для корректного отображения на iPad
+        authSession.presentationContextProvider = self
+        
+        // Настраиваем предпочтение использования данных из браузера (false - использовать куки Safari)
+        authSession.prefersEphemeralWebBrowserSession = false
+        
+        // Запускаем сессию аутентификации
+        if !authSession.start() {
+            print("Не удалось запустить сессию аутентификации")
+            let alert = UIAlertController(
+                title: "Ошибка",
+                message: "Не удалось запустить процесс авторизации",
+                preferredStyle: .alert
+            )
+            alert.addAction(UIAlertAction(title: "OK", style: .default))
+            self.present(alert, animated: true)
+        }
+    }
+    
+    // Обработка данных после успешной авторизации
+    func processAuthenticationCallback(url: URL) {
+        // Получаем компоненты URL
+        guard let components = URLComponents(url: url, resolvingAgainstBaseURL: false) else {
+            return
+        }
+        
+        // Анализируем параметры в URL
+        if let queryItems = components.queryItems {
+            var authData = [String: String]()
+            for item in queryItems {
+                authData[item.name] = item.value
+            }
+            
+            // Проверяем наличие кода авторизации или токена
+            if let code = authData["code"] {
+                print("Получен код авторизации: \(code)")
+                // Можно обменять код на токен доступа через API соответствующего сервиса
+            } else if let token = authData["token"] {
+                print("Получен токен доступа: \(token)")
+            }
+            
+            // Здесь можно отправить данные авторизации в основной веб-интерфейс
+            self.sendAuthDataToWebView(authData: authData)
+        }
+        
+        // Перезагружаем основную страницу или выполняем переход на определенный URL
+        if let webView = self.webView {
+            // Например, возвращаемся на главную страницу после авторизации
+            webView.load(URLRequest(url: rootUrl))
+        }
+    }
+    
+    // Метод для отправки данных авторизации в WebView
+    func sendAuthDataToWebView(authData: [String: String]) {
+        guard let webView = self.webView else {
+            return
+        }
+        
+        // Создаем JavaScript для передачи данных в веб-приложение
+        var jsCode = "if (window.handleExternalAuth) { window.handleExternalAuth("
+        
+        // Преобразуем словарь в JSON-строку для передачи в JavaScript
+        if let jsonData = try? JSONSerialization.data(withJSONObject: authData),
+           let jsonString = String(data: jsonData, encoding: .utf8) {
+            jsCode += jsonString
+        } else {
+            jsCode += "{}"
+        }
+        
+        jsCode += "); }"
+        
+        // Выполняем JavaScript в контексте веб-страницы
+        webView.evaluateJavaScript(jsCode) { (result, error) in
+            if let error = error {
+                print("Ошибка при передаче данных авторизации: \(error)")
+            }
+        }
+    }
+}
+
+// Расширение для поддержки протокола ASWebAuthenticationPresentationContextProviding
+extension ViewController: ASWebAuthenticationPresentationContextProviding {
+    func presentationAnchor(for session: ASWebAuthenticationSession) -> ASPresentationAnchor {
+        return view.window!
     }
 }
