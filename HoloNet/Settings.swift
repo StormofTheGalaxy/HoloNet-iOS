@@ -17,7 +17,7 @@ let allowedOrigins: [String] = ["holonet.stormgalaxy.com", "appleid.apple.com", 
 
 // auth origins will open in modal and show toolbar for back into the main origin.
 // These should also appear in Info.plist
-let authOrigins: [String] = ["discord.com", "github.com", "vk.com"]
+let authOrigins: [String] = ["accounts.google.com", "discord.com", "github.com", "vk.com"]
 // allowedOrigins + authOrigins <= 10
 
 let platformCookie = Cookie(name: "app-platform", value: "iOS App Store")
